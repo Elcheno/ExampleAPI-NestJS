@@ -7,7 +7,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { Note as NoteModel } from '@prisma/client';
+import { Note as NoteModel } from '../../prisma/generated/client';
 import { NoteService } from './note.service';
 import { CreateNoteDTO } from 'src/DTO/CreateNoteDTO';
 
