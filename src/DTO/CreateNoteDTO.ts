@@ -5,23 +5,31 @@ export class CreateNoteDTO {
   @ApiProperty({
     description: 'Note title',
     minLength: 4,
-    required: true
-  }) @IsNotEmpty() title: string;
+    required: true,
+  })
+  @IsNotEmpty()
+  title: string;
 
   @ApiProperty({
     description: 'Note description',
     required: false,
-  }) @IsString() description?: string;
+  })
+  @IsString()
+  description?: string;
 
   @ApiProperty({
     description: 'Date in ISO 8601 format',
     format: 'ISO 8601',
     required: true,
-  }) @IsDateString() date: string;
+  })
+  @IsDateString()
+  date: string;
 
   @ApiProperty({
     description: 'User ID',
     required: true,
     type: String,
-  }) @IsNotEmpty() userId: string;
+  })
+  @IsNotEmpty()
+  userId: string;
 }
