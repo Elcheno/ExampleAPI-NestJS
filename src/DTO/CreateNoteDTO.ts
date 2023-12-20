@@ -1,9 +1,27 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { IsDateString, IsString, IsNotEmpty } from 'class-validator';
 
 export class CreateNoteDTO {
-  @IsNotEmpty() title: string;
-  @IsString() description?: string;
-  @IsDateString() date: string;
-  @IsNotEmpty() userId: string;
-  // @IsEmail() emailUser: string;
+  @ApiProperty({
+    description: 'Note title',
+    minLength: 4,
+    required: true
+  }) @IsNotEmpty() title: string;
+
+  @ApiProperty({
+    description: 'Note description',
+    required: false,
+  }) @IsString() description?: string;
+
+  @ApiProperty({
+    description: 'Date in ISO 8601 format',
+    format: 'ISO 8601',
+    required: true,
+  }) @IsDateString() date: string;
+
+  @ApiProperty({
+    description: 'User ID',
+    required: true,
+    type: String,
+  }) @IsNotEmpty() userId: string;
 }
