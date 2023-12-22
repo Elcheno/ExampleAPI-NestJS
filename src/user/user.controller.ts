@@ -3,13 +3,20 @@ import {
   Controller,
   Delete,
   Get,
+  HttpException,
+  HttpStatus,
   Param,
   Post,
   Put,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDTO } from 'src/DTO/CreateUserDTO';
+import { CreateUserDTOGoogle } from 'src/DTO/CreateUserDTOGoogle';
 import { User as UserModel } from '../../prisma/generated/client';
+
+// import crypto from 'node:crypto';
+const crypto = require('node:crypto');
+const bcrypt = require('bcrypt');
 
 @Controller('user')
 export class UserController {
@@ -17,7 +24,7 @@ export class UserController {
 
   @Get(':id')
   async getUserById(@Param('id') id: string): Promise<UserModel | null> {
-    return this.userService.getUserById({ id: Number(id) });
+    return this.userService.getUserById({ id: id });
   }
 
   @Get('page/:page')
@@ -47,8 +54,40 @@ export class UserController {
   }
 
   @Post()
-  async createUser(@Body() data: CreateUserDTO): Promise<UserModel> {
-    return this.userService.createUser(data);
+  async createUser(@Body() data: CreateUserDTO): Promise<UserModel> {;
+    try {
+      const id = crypto.randomUUID();
+
+      const salt = await bcrypt.genSaltSync(10);
+      const password = bcrypt.hashSync(data.password, salt);
+      
+      if (password) {
+        data.password = password;
+        return this.userService.createUser({ id, ...data });
+
+      } else {
+        throw new HttpException('Internal Server Error', HttpStatus.INTERNAL_SERVER_ERROR);
+
+      }
+
+    } catch {
+      throw new HttpException('Internal Server Error', HttpStatus.INTERNAL_SERVER_ERROR);
+
+    }
+
+  }
+
+  @Post('google')
+  async createUserGoogle(@Body() data: CreateUserDTOGoogle): Promise<UserModel> {
+    try {
+      const id = crypto.randomUUID();
+      return this.userService.createUser({ id, ...data });
+
+    } catch {
+      throw new HttpException('Internal Server Error', HttpStatus.INTERNAL_SERVER_ERROR);
+
+    }
+
   }
 
   @Put(':id')
@@ -56,11 +95,11 @@ export class UserController {
     @Param('id') id: string,
     @Body() data: CreateUserDTO,
   ): Promise<UserModel> {
-    return this.userService.updateUser({ id: Number(id) }, data);
+    return this.userService.updateUser({ id: id }, data);
   }
 
   @Delete(':id')
   async deleteUser(@Param('id') id: string): Promise<UserModel> {
-    return this.userService.deleteUser({ id: Number(id) });
+    return this.userService.deleteUser({ id: id });
   }
 }

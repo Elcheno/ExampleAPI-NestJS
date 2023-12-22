@@ -28,7 +28,7 @@ export class NoteController {
     return this.noteService.getAllNote({
       skip: page * 10,
       take: 10,
-      where: { userId: Number(userId) },
+      where: { userId: userId },
     });
   }
 
@@ -57,7 +57,7 @@ export class NoteController {
       date,
       user: {
         connect: {
-          id: Number(userId),
+          id: userId,
         },
       },
     });

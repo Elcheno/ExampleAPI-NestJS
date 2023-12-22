@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma, User } from '../../prisma/generated/client';
 import { PrismaService } from 'src/prisma.service';
+const crypto = require('node:crypto');
 
 @Injectable()
 export class UserService {
@@ -41,4 +42,5 @@ export class UserService {
   ): Promise<User> {
     return this.prisma.user.update({ where: id, data });
   }
+
 }

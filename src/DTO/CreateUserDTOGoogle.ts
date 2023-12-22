@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsString } from 'class-validator';
 
-export class CreateUserDTO {
+export class CreateUserDTOGoogle {
   @ApiProperty({
     description: 'The name of the user',
     required: false,
@@ -18,9 +18,9 @@ export class CreateUserDTO {
   email: string;
 
   @ApiProperty({
-    description: 'The password of the user',
+    description: 'The UID of the user',
     required: true,
   })
   @IsString()
-  password: string;
+  uid: string;
 }

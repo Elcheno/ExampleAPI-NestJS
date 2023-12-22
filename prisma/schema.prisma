@@ -9,15 +9,15 @@ generator client {
 datasource db {
   provider = "postgresql"
   url = env("DATABASE_URL")
-  //url = env("DATABASE_PRISMA_URL") // uses connection pooling
-  directUrl = env("DATABASE_URL_NON_POOLING")
 }
 
 model User {
-  id      Int       @id         @default(autoincrement())
-  email   String    @unique
-  name    String?
-  notes   Note[]
+  id          String       @id
+  uid         String?   @unique
+  email       String    @unique
+  name        String?
+  password    String?   
+  notes       Note[]
 }
 
 model Note {
@@ -26,5 +26,5 @@ model Note {
   description   String?
   date          DateTime
   user          User        @relation(fields: [userId], references: [id])
-  userId        Int
+  userId        String
 }

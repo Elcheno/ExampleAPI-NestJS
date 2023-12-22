@@ -1,7 +1,13 @@
 # compiled output
 /dist
+
+
+# NODE
 /node_modules
 package-lock.json
+
+# PRISMA
+/prisma/generated/
 
 # Logs
 logs
