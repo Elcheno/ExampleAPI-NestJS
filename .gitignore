@@ -8,6 +8,7 @@ package-lock.json
 
 # PRISMA
 /prisma/generated/
+/prisma/migrations/
 
 # Logs
 logs
