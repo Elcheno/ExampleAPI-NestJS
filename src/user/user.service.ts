@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma, User } from '../../prisma/generated/client';
 import { PrismaService } from 'src/prisma.service';
+
 const crypto = require('node:crypto');
 
 @Injectable()
