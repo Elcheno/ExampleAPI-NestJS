@@ -14,7 +14,6 @@ import { CreateUserDTO } from 'src/DTO/CreateUserDTO';
 import { CreateUserDTOGoogle } from 'src/DTO/CreateUserDTOGoogle';
 import { User as UserModel } from '../../prisma/generated/client';
 
-// import crypto from 'node:crypto';
 const crypto = require('node:crypto');
 const bcrypt = require('bcrypt');
 
