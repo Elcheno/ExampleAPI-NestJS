@@ -10,12 +10,13 @@ import { AuthModule } from './auth/auth.module';
 import { AuthService } from './auth/auth.service';
 import { AuthController } from './auth/auth.controller';
 import { TokenBearer } from './middleware/tokenBearer';
+import { UserService } from './user/user.service';
 
 
 @Module({
   imports: [UserModule, NoteModule, AuthModule],
   controllers: [AppController, NoteController, AuthController],
-  providers: [AppService, PrismaService, NoteService, AuthService],
+  providers: [AppService, PrismaService, NoteService, AuthService, UserService],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {

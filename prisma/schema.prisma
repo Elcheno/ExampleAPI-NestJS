@@ -25,6 +25,6 @@ model Note {
   title         String
   description   String?
   date          DateTime
-  user          User        @relation(fields: [userId], references: [id])
+  user          User        @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   userId        String
 }
