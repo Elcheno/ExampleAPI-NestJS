@@ -24,9 +24,15 @@ export class AuthService {
 
         if (!(user && passwordCorrect)) return null;
 
+        const expPlus = Number(process.env.EXP);
+        let expToken = null;
+
+        if (expPlus) expToken = Math.round(Date.now() / 1000 + expPlus);
+
         const userForToken = {
             id: user.id,
-            name: user.name,           
+            name: user.name,
+            exp: expToken           
         }
 
         const token = jwt.sign(userForToken, process.env.SECRET);

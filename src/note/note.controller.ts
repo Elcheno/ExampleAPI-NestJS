@@ -54,7 +54,7 @@ export class NoteController {
   }
 
   @Post()
-  async createNote(@Headers() headers, @Body() data: CreateNoteDTO): Promise<NoteModel> {
+  async createNote(@Headers() headers: any, @Body() data: CreateNoteDTO): Promise<NoteModel> {
     const { title, description, date } = data;
 
     const userId = headers['authorization'].id;
