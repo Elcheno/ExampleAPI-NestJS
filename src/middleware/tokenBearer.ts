@@ -1,13 +1,13 @@
 import { HttpException, HttpStatus, Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
-import { UserService } from 'src/user/user.service';
-
-const jwt = require('jsonwebtoken');
+import { AuthService } from 'src/auth/auth.service';
 
 @Injectable()
 export class TokenBearer implements NestMiddleware {
 
-    constructor(private userService: UserService) {}
+    constructor(
+      private authService: AuthService
+      ) {}
 
     async use(req: Request, _res: Response, next: NextFunction) {
 
@@ -17,27 +17,9 @@ export class TokenBearer implements NestMiddleware {
       if (!authorization || !authorization.toLowerCase().startsWith('bearer')) throw new HttpException('Unauthorized Access', HttpStatus.UNAUTHORIZED);
       const token = authorization.substring(7);
 
-      let decodedToken = null;
+      let decodedToken = await this.authService.checkToken(token);
 
-      try {
-        decodedToken = jwt.verify(token, process.env.SECRET);
-
-      } catch(e) {
-        console.error(e);
-        throw new HttpException('Unauthorized Access', HttpStatus.UNAUTHORIZED);
-      }
-      
-      // console.log("middleware SIGNAL 1")
-
-      if (!token || !decodedToken.id || !decodedToken.exp) throw new HttpException('Unauthorized Access', HttpStatus.UNAUTHORIZED);
-
-      if (decodedToken.exp < Date.now() / 1000) throw new HttpException('Invalid Token Access', HttpStatus.UNAUTHORIZED);
-
-      // console.log("middleware SIGNAL 2")
-
-      const user = await this.userService.getUserById({ id: decodedToken.id });
-
-      if (!user) throw new HttpException('Unauthorized Access', HttpStatus.UNAUTHORIZED);
+      if (decodedToken === null) throw new HttpException('Invalid Token Access', HttpStatus.UNAUTHORIZED);
 
       req.headers['authorization'] = decodedToken;
 

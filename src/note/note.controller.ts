@@ -4,8 +4,6 @@ import {
   Delete,
   Get,
   Headers,
-  HttpException,
-  HttpStatus,
   Param,
   Post,
   Put,
