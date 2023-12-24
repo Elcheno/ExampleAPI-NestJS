@@ -24,12 +24,4 @@ export class CreateNoteDTO {
   })
   @IsDateString()
   date: string;
-
-  @ApiProperty({
-    description: 'User ID',
-    required: true,
-    type: String,
-  })
-  @IsNotEmpty()
-  userId: string;
 }

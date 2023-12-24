@@ -1,7 +1,7 @@
 import { Body, Controller, HttpException, HttpStatus, Post } from '@nestjs/common';
 import { LoginDTO } from 'src/DTO/LoginDTO';
 import { AuthService } from './auth.service';
-import { User as UserModel } from '../../prisma/generated/client';
+import { CreateUserDTO } from 'src/DTO/CreateUserDTO';
 
 @Controller('auth')
 export class AuthController {
@@ -15,6 +15,18 @@ export class AuthController {
         if(response === null) {
             throw new HttpException('Unauthorized Access', HttpStatus.UNAUTHORIZED);
         
+        }
+
+        return response;
+    }
+
+    @Post('register')
+    async register(@Body() data: CreateUserDTO): Promise<any> {
+        const response = await this.authService.register(data);
+
+        if (response === null) {
+            throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
+
         }
 
         return response;

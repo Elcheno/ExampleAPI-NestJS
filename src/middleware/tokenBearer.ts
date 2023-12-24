@@ -10,6 +10,9 @@ export class TokenBearer implements NestMiddleware {
     constructor(private userService: UserService) {}
 
     async use(req: Request, _res: Response, next: NextFunction) {
+
+      console.log('middleware');
+
       const authorization = req.headers['authorization'];
       if (!authorization || !authorization.toLowerCase().startsWith('bearer')) throw new HttpException('Unauthorized Access', HttpStatus.UNAUTHORIZED);
       const token = authorization.substring(7);
@@ -29,6 +32,8 @@ export class TokenBearer implements NestMiddleware {
       const user = await this.userService.getUserById({ id: decodedToken.id });
 
       if (!user) throw new HttpException('Unauthorized Access', HttpStatus.UNAUTHORIZED);
+
+      req.headers['authorization'] = decodedToken;
       
       next();
     }

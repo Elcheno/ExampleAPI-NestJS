@@ -1,4 +1,4 @@
-import { MiddlewareConsumer, Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PrismaService } from './prisma.service';
@@ -11,6 +11,7 @@ import { AuthService } from './auth/auth.service';
 import { AuthController } from './auth/auth.controller';
 import { TokenBearer } from './middleware/tokenBearer';
 import { UserService } from './user/user.service';
+import { UserController } from './user/user.controller';
 
 
 @Module({
@@ -22,6 +23,6 @@ export class AppModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(TokenBearer)
-      .forRoutes('note');
+      .forRoutes(UserController, NoteController);
   }
 }

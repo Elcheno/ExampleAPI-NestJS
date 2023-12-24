@@ -3,6 +3,9 @@ import {
   Controller,
   Delete,
   Get,
+  Headers,
+  HttpException,
+  HttpStatus,
   Param,
   Post,
   Put,
@@ -10,6 +13,8 @@ import {
 import { Note as NoteModel } from '../../prisma/generated/client';
 import { NoteService } from './note.service';
 import { CreateNoteDTO } from 'src/DTO/CreateNoteDTO';
+
+const jwt = require('jsonwebtoken');
 
 @Controller('note')
 export class NoteController {
@@ -49,8 +54,11 @@ export class NoteController {
   }
 
   @Post()
-  async createNote(@Body() data: CreateNoteDTO): Promise<NoteModel> {
-    const { title, description, date, userId } = data;
+  async createNote(@Headers() headers, @Body() data: CreateNoteDTO): Promise<NoteModel> {
+    const { title, description, date } = data;
+
+    const userId = headers['authorization'].id;
+
     return this.noteService.createNote({
       title,
       description,
