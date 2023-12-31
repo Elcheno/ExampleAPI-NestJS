@@ -36,8 +36,10 @@ export class AuthController {
         const decodedToken = await this.authService.checkToken(token);
 
         if (decodedToken === null) throw new HttpException('Invalid Token Access', HttpStatus.UNAUTHORIZED);
-
+        console.log(decodedToken);
         return {
+            name: decodedToken.name,
+            email: decodedToken.email,
             token: data.token
         }
     }

@@ -15,7 +15,7 @@ export class NoteService {
     take?: number;
     cursor?: Prisma.NoteWhereUniqueInput;
     where?: Prisma.NoteWhereInput;
-    orderBy?: Prisma.UserOrderByWithRelationInput;
+    orderBy?: Prisma.NoteOrderByWithRelationInput;
   }): Promise<Note[]> {
     const { skip, take, cursor, where, orderBy } = params;
     return this.prisma.note.findMany({

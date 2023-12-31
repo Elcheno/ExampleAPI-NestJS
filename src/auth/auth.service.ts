@@ -31,6 +31,7 @@ export class AuthService {
       const userForToken = {
           id: user.id,
           name: user.name,
+          email: user.email,
           exp: expToken           
       }
 
@@ -88,7 +89,7 @@ export class AuthService {
       const user = await this.userService.getUserById({ id: decodedToken.id });
 
       if (!user) return null;
-
+      console.log(decodedToken);
       return decodedToken;
     }
 }

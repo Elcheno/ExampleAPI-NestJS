@@ -16,22 +16,34 @@ const jwt = require('jsonwebtoken');
 
 @Controller('note')
 export class NoteController {
-  constructor(private noteService: NoteService) {}
+  constructor(private noteService: NoteService) { }
 
   @Get(':id')
-  async getUserById(@Param('id') id: string): Promise<NoteModel | null> {
+  async getNoteById(@Param('id') id: string): Promise<NoteModel | null> {
     return this.noteService.getNoteById({ id: Number(id) });
   }
 
-  @Get(':userId/page/:page')
-  async getAllUser(
-    @Param('userId') userId: string,
+  @Get('page/:page')
+  async getAllNotes(
     @Param('page') page: number,
+    @Headers() headers: any
   ): Promise<NoteModel[]> {
+    const userId = headers['authorization'].id;
+    console.log(page)
+    if (page < 0) {
+      console.log("page -1")
+
+      return this.noteService.getAllNote({
+        skip: 0,
+        take: 20,
+        where: { userId: userId },
+      });
+    }
     return this.noteService.getAllNote({
       skip: page * 10,
       take: 10,
       where: { userId: userId },
+      orderBy: { date: 'desc' },
     });
   }
 
