@@ -40,6 +40,7 @@ export class AuthController {
         return {
             name: decodedToken.name,
             email: decodedToken.email,
+            picture: decodedToken.picture,
             token: data.token
         }
     }

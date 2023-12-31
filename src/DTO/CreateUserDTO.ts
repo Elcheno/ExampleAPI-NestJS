@@ -23,4 +23,11 @@ export class CreateUserDTO {
   })
   @IsString()
   password: string;
+
+  @ApiProperty({
+    description: 'The picture of the user',
+    required: false,
+  })
+  @IsString()
+  picture?: string;
 }

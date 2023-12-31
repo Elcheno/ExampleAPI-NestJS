@@ -12,4 +12,8 @@ export class UserResponseDTO {
     })
     name?: string;
 
+    @ApiProperty({
+        description: 'The picture of the user',
+    })
+    picture?: string;
 }

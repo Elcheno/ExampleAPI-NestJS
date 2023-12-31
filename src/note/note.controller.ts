@@ -12,8 +12,6 @@ import { Note as NoteModel } from '../../prisma/generated/client';
 import { NoteService } from './note.service';
 import { CreateNoteDTO } from 'src/DTO/CreateNoteDTO';
 
-const jwt = require('jsonwebtoken');
-
 @Controller('note')
 export class NoteController {
   constructor(private noteService: NoteService) { }

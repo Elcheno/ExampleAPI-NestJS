@@ -32,6 +32,7 @@ export class AuthService {
           id: user.id,
           name: user.name,
           email: user.email,
+          picture: user.picture,
           exp: expToken           
       }
 
@@ -40,6 +41,7 @@ export class AuthService {
       return {
           name: user.name,
           email: user.email,
+          picture: user.picture,
           token: token
       };
     }
