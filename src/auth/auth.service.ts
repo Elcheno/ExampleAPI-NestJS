@@ -32,7 +32,6 @@ export class AuthService {
           id: user.id,
           name: user.name,
           email: user.email,
-          picture: user.picture,
           exp: expToken           
       }
 
@@ -92,6 +91,9 @@ export class AuthService {
 
       if (!user) return null;
       console.log(decodedToken);
-      return decodedToken;
+      return {
+        decodedToken,
+        picture: user.picture
+      };
     }
 }

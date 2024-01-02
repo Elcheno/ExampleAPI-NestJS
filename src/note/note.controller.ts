@@ -65,7 +65,7 @@ export class NoteController {
   async createNote(@Headers() headers: any, @Body() data: CreateNoteDTO): Promise<NoteModel> {
     const { title, description, date } = data;
 
-    const userId = headers['authorization'].id;
+    const userId = headers['authorization'].decodedToken.id;
 
     return this.noteService.createNote({
       title,
