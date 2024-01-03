@@ -33,14 +33,17 @@ export class AuthController {
         if (!data.token) throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
         let token = data.token;
 
-        const { decodedToken, picture } = await this.authService.checkToken(token);
+        const { decodedToken, user } = await this.authService.checkToken(token);
 
         if (decodedToken === null) throw new HttpException('Invalid Token Access', HttpStatus.UNAUTHORIZED);
-        console.log(decodedToken);
+
         return {
-            name: decodedToken.name,
-            email: decodedToken.email,
-            picture: picture,
+            username: user.username,
+            email: user.email,
+            name: user.name,
+            picture: user.picture,
+            rol: user.rol,
+            state: user.state,
             token: data.token
         }
     }

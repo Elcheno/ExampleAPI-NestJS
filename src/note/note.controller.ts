@@ -26,7 +26,7 @@ export class NoteController {
     @Param('page') page: number,
     @Headers() headers: any
   ): Promise<NoteModel[]> {
-    const userId = headers['authorization'].id;
+    const userId = headers['authorization'].decodedToken.id;
     console.log(page)
     if (page < 0) {
       console.log("page -1")

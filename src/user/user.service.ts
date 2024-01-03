@@ -45,6 +45,8 @@ export class UserService {
     id: Prisma.UserWhereUniqueInput,
     data: Prisma.UserUpdateInput,
   ): Promise<User> {
+    const user = await this.prisma.user.findUnique({ where: id });
+    if (!user) throw new Error('User not found');
     return this.prisma.user.update({ where: id, data });
   }
 

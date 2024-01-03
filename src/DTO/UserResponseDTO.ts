@@ -13,7 +13,17 @@ export class UserResponseDTO {
     name?: string;
 
     @ApiProperty({
+        description: 'The username of the user',
+    })
+    username?: string;
+
+    @ApiProperty({
         description: 'The picture of the user',
     })
     picture?: string;
+
+    @ApiProperty({
+        description: 'The state of the user',
+    })
+    state?: string;
 }

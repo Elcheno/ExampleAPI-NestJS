@@ -6,12 +6,14 @@ import {
   Put,
   Headers,
   HttpStatus,
-  HttpException
+  HttpException,
+  Param
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDTO } from 'src/DTO/CreateUserDTO';
 import { User as UserModel } from '../../prisma/generated/client';
 import { UserResponseDTO } from 'src/DTO/UserResponseDTO';
+import { UpdateUserDTO } from 'src/DTO/UpdateUserDTO';
+import { UpdateUserStatusDTO } from 'src/DTO/UpdateUserStatusDTO';
 
 const bcrypt = require('bcrypt');
 
@@ -35,15 +37,24 @@ export class UserController {
     return response;
   }
 
-  @Put()
-  async updateUser(@Headers() headers: any, @Body() data: CreateUserDTO): Promise<UserResponseDTO> {
-    const id = headers['authorization'].id;
+  @Get('page/:page')
+  async getAllUser(
+    @Param('page') page: number,
+    @Headers() headers: any
+  ): Promise<UserModel[]> {
+    const rol = headers['authorization'].decodedToken.rol;
+    if (rol !== 'admin') throw new HttpException('Unauthorized Access', HttpStatus.UNAUTHORIZED);
+    console.log(page)
+    return this.userService.getAllUser({
+      skip: page * 10,
+      take: 10,
+      where: { rol: 'user' }
+    });
+  }
 
-    if (data?.password) {
-      const salt = await bcrypt.genSaltSync(10);
-      const password = bcrypt.hashSync(data.password, salt);
-      data.password = password
-    }
+  @Put()
+  async updateUser(@Headers() headers: any, @Body() data: UpdateUserDTO): Promise<UserResponseDTO> {
+    const id = headers['authorization'].decodedToken.id;
 
     const user: UserModel = await this.userService.updateUser({ id: id }, data);
 
@@ -52,6 +63,7 @@ export class UserController {
     const response: UserResponseDTO = {
       name: user.name,
       email: user.email,
+      username: user.username,
       picture: user.picture
     }
 
@@ -69,10 +81,29 @@ export class UserController {
     const response: UserResponseDTO = {
       name: user.name,
       email: user.email,
+      username: user.username,
       picture: user.picture,
     }
 
     return response; 
+  }
+
+  @Put('/status')
+  async updateUserStatus(@Headers() headers: any, @Body() data: UpdateUserStatusDTO): Promise<UserResponseDTO> {
+    const rol = headers['authorization'].decodedToken.rol;
+    if (rol !== 'admin') throw new HttpException('Unauthorized Access', HttpStatus.UNAUTHORIZED);
+    const { id, state } = data;
+    const response = await this.userService.updateUser({ id: id }, { state: state  });
+
+    if (!response) throw new HttpException('Resource Not Found', HttpStatus.NOT_FOUND);
+
+    return {
+      name: response.name,
+      username: response.username,
+      email: response.email,
+      picture: response.picture,
+      state: response.state
+    };
   }
 
 }
