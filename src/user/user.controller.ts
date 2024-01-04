@@ -41,20 +41,32 @@ export class UserController {
   async getAllUser(
     @Param('page') page: number,
     @Headers() headers: any
-  ): Promise<UserModel[]> {
-    const rol = headers['authorization'].decodedToken.rol;
+  ): Promise<UserResponseDTO[]> {
+    const rol = headers['authorization'].rol;
     if (rol !== 'admin') throw new HttpException('Unauthorized Access', HttpStatus.UNAUTHORIZED);
     console.log(page)
-    return this.userService.getAllUser({
+    const response = this.userService.getAllUser({
       skip: page * 10,
       take: 10,
       where: { rol: 'user' }
     });
+
+    return (await response).map((user) => {
+      return {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        username: user.username,
+        picture: user.picture,
+        state: user.state
+      }
+    })
+
   }
 
   @Put()
   async updateUser(@Headers() headers: any, @Body() data: UpdateUserDTO): Promise<UserResponseDTO> {
-    const id = headers['authorization'].decodedToken.id;
+    const id = headers['authorization'].id;
 
     const user: UserModel = await this.userService.updateUser({ id: id }, data);
 
@@ -88,11 +100,13 @@ export class UserController {
     return response; 
   }
 
-  @Put('/status')
+  @Put('/state')
   async updateUserStatus(@Headers() headers: any, @Body() data: UpdateUserStatusDTO): Promise<UserResponseDTO> {
-    const rol = headers['authorization'].decodedToken.rol;
+    const rol = headers['authorization'].rol;
     if (rol !== 'admin') throw new HttpException('Unauthorized Access', HttpStatus.UNAUTHORIZED);
     const { id, state } = data;
+    console.log(data)
+    console.log(id, state)
     const response = await this.userService.updateUser({ id: id }, { state: state  });
 
     if (!response) throw new HttpException('Resource Not Found', HttpStatus.NOT_FOUND);

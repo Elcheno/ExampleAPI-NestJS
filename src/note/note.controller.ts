@@ -26,7 +26,7 @@ export class NoteController {
     @Param('page') page: number,
     @Headers() headers: any
   ): Promise<NoteModel[]> {
-    const userId = headers['authorization'].decodedToken.id;
+    const userId = headers['authorization'].id;
     console.log(page)
     if (page < 0) {
       console.log("page -1")
@@ -65,7 +65,7 @@ export class NoteController {
   async createNote(@Headers() headers: any, @Body() data: CreateNoteDTO): Promise<NoteModel> {
     const { title, description, date } = data;
 
-    const userId = headers['authorization'].decodedToken.id;
+    const userId = headers['authorization'].id;
 
     return this.noteService.createNote({
       title,

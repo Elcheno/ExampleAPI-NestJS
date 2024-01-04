@@ -17,11 +17,14 @@ export class TokenBearer implements NestMiddleware {
       if (!authorization || !authorization.toLowerCase().startsWith('bearer')) throw new HttpException('Unauthorized Access', HttpStatus.UNAUTHORIZED);
       const token = authorization.substring(7);
 
-      let decodedToken = await this.authService.checkToken(token);
+      let response = await this.authService.checkToken(token);
 
-      if (decodedToken === null) throw new HttpException('Invalid Token Access', HttpStatus.UNAUTHORIZED);
+      if (response === null) throw new HttpException('Invalid Token Access', HttpStatus.UNAUTHORIZED);
 
-      req.headers['authorization'] = decodedToken;
+      req.headers['authorization'] = response.decodedToken;
+      console.log(response.decodedToken)
+
+      if (response.decodedToken.state !== 'active') throw new HttpException('Unauthorized Access', HttpStatus.UNAUTHORIZED);
 
       console.log("middleware complete")
       
