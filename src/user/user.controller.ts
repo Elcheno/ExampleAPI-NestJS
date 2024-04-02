@@ -44,14 +44,13 @@ export class UserController {
   ): Promise<UserResponseDTO[]> {
     const rol = headers['authorization'].rol;
     if (rol !== 'admin') throw new HttpException('Unauthorized Access', HttpStatus.UNAUTHORIZED);
-    console.log(page)
     const response = this.userService.getAllUser({
       skip: page * 10,
       take: 10,
       where: { rol: 'user' }
     });
 
-    return (await response).map((user) => {
+    return (await response).map((user) => {      
       return {
         id: user.id,
         name: user.name,
