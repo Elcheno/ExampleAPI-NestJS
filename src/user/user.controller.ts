@@ -112,6 +112,7 @@ export class UserController {
     if (!response) throw new HttpException('Resource Not Found', HttpStatus.NOT_FOUND);
 
     return {
+      id: response.id,
       name: response.name,
       username: response.username,
       email: response.email,
